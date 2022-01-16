@@ -12,4 +12,9 @@ RUN pipenv install --system --deploy --ignore-pipfile
 ENV PYTHONPATH /home
 ENV FLASK_APP /home/app.py
 
-CMD ["python", "-m", "flask", "run"]
+EXPOSE 5000
+
+#CMD ["python", "-m", "flask", "run"]
+
+RUN chmod u+x ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]

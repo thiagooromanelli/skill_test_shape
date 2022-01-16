@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_migrate import Migrate
 from config.config import Config
 from api.routes.routes import api
 from database.database import db
@@ -14,6 +15,7 @@ def create_app():
     app.register_blueprint(api, url_prefix='/api')
 
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     return app
 
