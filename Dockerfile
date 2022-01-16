@@ -6,9 +6,10 @@ COPY . /home/
 
 RUN ls -la /home
 RUN pip install --quiet --upgrade pip
-RUN pip install  pipenv
-RUN pipenv install -r /home/requirements.txt
+RUN pip install pipenv
+RUN pipenv install --system --deploy --ignore-pipfile
 
 ENV PYTHONPATH /home
+ENV FLASK_APP /home/app.py
 
-CMD [ "pipenv", "run", "python", "-m", "flask", "run"]
+CMD ["python", "-m", "flask", "run"]
