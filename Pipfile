@@ -14,6 +14,7 @@ Flask-Session = "*"
 alembic = "~=1.7.5"
 Flask-API = "*"
 SQLAlchemy = "~=1.4.29"
+flasgger = "*"
 
 [dev-packages]
 

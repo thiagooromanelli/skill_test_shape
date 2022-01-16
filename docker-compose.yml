@@ -1,4 +1,4 @@
-version: '3'
+version: "3.8"
 services:
 
   pg-cybersec:
@@ -9,9 +9,13 @@ services:
       POSTGRES_PASSWORD: "12345"
     restart: on-failure
 
-#  webapp:
-#    image: thiagooromanelli/webapp
-#    container_name: webapp
-#    network_mode: "host"
-#    restart: on-failure
-
+  web:
+#    build: .
+    image: webapp
+    container_name: webapp
+    network_mode: "host"
+    expose:
+      - 5000
+    environment:
+      - FLASK_ENV=development
+      - SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost:5432/FPSO
