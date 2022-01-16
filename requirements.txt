@@ -1,0 +1,8 @@
+Flask~=2.0.2
+flask-sqlalchemy
+Flask-Migrate==3.1.0
+Flask-Session
+Flask-Api
+psycopg2-binary
+SQLAlchemy~=1.4.29
+alembic~=1.7.5

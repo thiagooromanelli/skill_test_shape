@@ -1,0 +1,17 @@
+version: '3'
+services:
+
+  pg-cybersec:
+    image: postgres
+    container_name: pg
+    network_mode: "host"
+    environment:
+      POSTGRES_PASSWORD: "12345"
+    restart: on-failure
+
+#  webapp:
+#    image: thiagooromanelli/webapp
+#    container_name: webapp
+#    network_mode: "host"
+#    restart: on-failure
+
