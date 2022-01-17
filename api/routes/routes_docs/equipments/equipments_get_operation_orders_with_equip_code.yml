@@ -1,0 +1,32 @@
+API to get all operation orders for a given equipment
+---
+tags:
+  - equipments
+parameters:
+  - in: path
+    name: equipment_code
+    required: true
+    schema:
+      type: string
+responses:
+  200:
+    description: OK
+    schema:
+      id: operation_orders_list
+      properties:
+        count:
+          type: integer
+          default: 2
+        equipments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              code:
+                type: string
+              type:
+                type: string
+              cost:
+                type: integer

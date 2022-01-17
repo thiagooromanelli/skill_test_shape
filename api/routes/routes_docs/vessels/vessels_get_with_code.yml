@@ -1,0 +1,18 @@
+API to get a specific Vessel
+---
+tags:
+  - vessels
+parameters:
+  - in: path
+    name: vessel_code
+    required: true
+    schema:
+      type: string
+responses:
+  200:
+    schema:
+      id: vessel
+      properties:
+        code:
+          type: string
+          default: "MV100"

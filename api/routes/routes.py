@@ -1,3 +1,4 @@
+from flasgger import swag_from
 from flask import request, jsonify, Blueprint
 from flask_api import status
 
@@ -17,13 +18,15 @@ ERROR_RESP_JSON_FORMAT = {"error": "The request payload is not in JSON format"}
 
 
 @api.route('/ping', methods=['GET'])
+@swag_from('./routes_docs/ping/ping.yml')
 def ping():
     return jsonify({"message": "PONG"}), status.HTTP_200_OK
 
 
 @api.route('/vessels', methods=['POST', 'GET'])
-@api.route('/vessels/<vessel_code>', methods=['GET'])
-def handle_vessels(vessel_code=None):
+@swag_from('./routes_docs/vessels/vessels_get_no_code.yml', methods=['GET'])
+@swag_from('./routes_docs/vessels/vessels_post_no_code.yml', methods=['POST'])
+def handle_vessels():
     # Handle POST requests
     if request.method == 'POST':
         if request.is_json:
@@ -42,15 +45,17 @@ def handle_vessels(vessel_code=None):
                    }), status.HTTP_201_CREATED
         return ERROR_RESP_JSON_FORMAT, status.HTTP_400_BAD_REQUEST
     # Handle GET requests
-    # If not optional parameter
-    if vessel_code is None:
-        try:
-            vessels = Vessel.query.all()
-            results = [{"code": vessel.code} for vessel in vessels]
-            return jsonify({"count": len(results), "vessels": results}), status.HTTP_200_OK
-        except Exception as err:
-            return jsonify({"error": f"{err}"}), status.HTTP_500_INTERNAL_SERVER_ERROR
-    # Otherwise use the parameter
+    try:
+        vessels = Vessel.query.all()
+        results = [{"code": vessel.code} for vessel in vessels]
+        return jsonify({"count": len(results), "vessels": results}), status.HTTP_200_OK
+    except Exception as err:
+        return jsonify({"error": f"{err}"}), status.HTTP_500_INTERNAL_SERVER_ERROR
+
+
+@api.route('/vessels/<vessel_code>', methods=['GET'])
+@swag_from('./routes_docs/vessels/vessels_get_with_code.yml', methods=['GET'])
+def handle_vessels_with_code(vessel_code):
     try:
         vessel = Vessel.query.filter(Vessel.code == vessel_code).first()
         if vessel is not None:
@@ -61,8 +66,9 @@ def handle_vessels(vessel_code=None):
 
 
 @api.route('/vessels/<vessel_code>/equipments', methods=['POST', 'GET'])
-@api.route('/vessels/<vessel_code>/equipments/<equipment_code>', methods=['GET'])
-def handle_vessels_equipments(vessel_code, equipment_code=None):
+@swag_from('./routes_docs/vessels/vessels_get_equip_with_vessel_code.yml', methods=['GET'])
+@swag_from('./routes_docs/vessels/vessels_post_equip_with_vessel_code.yml', methods=['POST'])
+def handle_vessels_equipments(vessel_code):
     # Handle POST requests
     if request.method == 'POST':
         if request.is_json:
@@ -88,24 +94,28 @@ def handle_vessels_equipments(vessel_code, equipment_code=None):
             return ERROR_RESP_JSON_FORMAT, status.HTTP_400_BAD_REQUEST
     # Handle GET requests
     # Return all equipments in a vessel (filter status is optional)
-    if equipment_code is None:
-        equipment_status = request.args.get("status", None)
-        if equipment_status:
-            equipments = VesselEquipment.query.filter(and_(
-                VesselEquipment.vessel_code == vessel_code,
-                VesselEquipment.status == equipment_status
-            ))
-        else:
-            equipments = VesselEquipment.query.filter(
-                VesselEquipment.vessel_code == vessel_code
-            )
-        results = [{
-            "code": equipment.code,
-            "name": equipment.name,
-            "location": equipment.location,
-            "status": equipment.status
-        } for equipment in equipments]
-        return jsonify({"count": len(results), "equipments": results}), status.HTTP_200_OK
+    equipment_status = request.args.get("status", None)
+    if equipment_status:
+        equipments = VesselEquipment.query.filter(and_(
+            VesselEquipment.vessel_code == vessel_code,
+            VesselEquipment.status == equipment_status
+        ))
+    else:
+        equipments = VesselEquipment.query.filter(
+            VesselEquipment.vessel_code == vessel_code
+        )
+    results = [{
+        "code": equipment.code,
+        "name": equipment.name,
+        "location": equipment.location,
+        "status": equipment.status
+    } for equipment in equipments]
+    return jsonify({"count": len(results), "equipments": results}), status.HTTP_200_OK
+
+
+@api.route('/vessels/<vessel_code>/equipments/<equipment_code>', methods=['GET'])
+@swag_from('./routes_docs/vessels/vessels_get_equip_with_vessel_code_and_equip_code.yml', methods=['GET'])
+def handle_vessel_equipment_with_code(vessel_code, equipment_code):
     # Return equipment with given equipment_code
     try:
         equipment = VesselEquipment.query.filter(and_(
@@ -125,6 +135,7 @@ def handle_vessels_equipments(vessel_code, equipment_code=None):
 
 
 @api.route('/equipments/status', methods=['PATCH'])
+@swag_from('./routes_docs/equipments/equipments_patch_status.yml', methods=['PATCH'])
 def update_equipment_status():
     data = request.get_json()
     try:
@@ -145,8 +156,9 @@ def update_equipment_status():
 
 
 @api.route('/equipments/orders', methods=['POST', 'GET'])
-@api.route('/equipments/<equipment_code>/orders', methods=['GET'])
-def operation_orders(equipment_code=None):
+@swag_from('./routes_docs/equipments/equipments_post_operation_orders.yml', methods=['POST'])
+@swag_from('./routes_docs/equipments/equipments_get_operation_orders.yml', methods=['GET'])
+def handle_operation_orders():
     # Handle POST requests
     if request.method == 'POST':
         if request.is_json:
@@ -171,7 +183,7 @@ def operation_orders(equipment_code=None):
             return ERROR_RESP_JSON_FORMAT, status.HTTP_400_BAD_REQUEST
     # Handle GET requests
     # Return all operation orders
-    if equipment_code is None:
+    try:
         orders = OperationOrder.query.all()
         results = [{
             "id": order.id,
@@ -180,7 +192,13 @@ def operation_orders(equipment_code=None):
             "cost": order.cost
         } for order in orders]
         return jsonify({"count": len(results), "orders": results}), status.HTTP_200_OK
-    # Return all operation orders related to equipment_code given
+    except Exception as err:
+        return jsonify({"error": f"{err}"}), status.HTTP_500_INTERNAL_SERVER_ERROR
+
+
+@api.route('/equipments/<equipment_code>/orders', methods=['GET'])
+@swag_from('./routes_docs/equipments/equipments_get_operation_orders_with_equip_code.yml', methods=['GET'])
+def handle_operation_orders_with_code(equipment_code):
     try:
         orders = OperationOrder.query.filter(
             OperationOrder.equipment_code == equipment_code
@@ -197,6 +215,7 @@ def operation_orders(equipment_code=None):
 
 
 @api.route('/equipments/orders/total-cost', methods=['GET'])
+@swag_from('./routes_docs/equipments/equipments_get_total_cost.yml', methods=['GET'])
 def total_cost_by_equipment():
     total_cost = 0
     orders_list = []
@@ -239,6 +258,7 @@ def total_cost_by_equipment():
 
 
 @api.route('/equipments/orders/avg-cost', methods=['GET'])
+@swag_from('./routes_docs/equipments/equipments_get_avg_cost.yml', methods=['GET'])
 def avg_cost_by_vessel():
     total_cost = 0
     vessel_code = request.args.get("code", None)

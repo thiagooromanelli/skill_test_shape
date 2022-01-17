@@ -1,0 +1,42 @@
+API to create new equipments for given Vessel
+---
+tags:
+  - equipments
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      id: equipment_operation_order
+      required:
+        - code
+        - type
+        - cost
+      properties:
+        code:
+          type: string
+          description: The equipment's code.
+          default: "5310B9D7"
+        type:
+          type: string
+          description: The order's type.
+          default: "replacement"
+        cost:
+          type: integer
+          description: The order's cost.
+          default: 10000
+responses:
+  201:
+    description: Created. Equipment operation order created successfully.
+    schema:
+      id: message
+      properties:
+        message:
+          type: string
+  400:
+    description: Bad request. Equipment does not exist or input body is not in JSON format.
+    schema:
+      id: error
+      properties:
+        error:
+          type: string

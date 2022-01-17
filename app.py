@@ -3,14 +3,16 @@ from flask_migrate import Migrate
 from config.config import Config
 from api.routes.routes import api
 from database.database import db
+from flasgger import Swagger
 
 
 def create_app():
     app = Flask(__name__)
-
     app.config['SWAGGER'] = {
-        'title': 'Application Swagger',
+        'title': 'FPSO Management - API Documentation',
+        'uiversion': 3
     }
+    swagger = Swagger(app)
     app.config.from_object(Config)
     app.register_blueprint(api, url_prefix='/api')
 

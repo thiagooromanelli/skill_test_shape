@@ -1,0 +1,36 @@
+API to get the average cost for given vessel code
+---
+tags:
+  - equipments
+parameters:
+  - in: query
+    name: code
+    schema:
+      type: string
+    description: Vessel's code
+responses:
+  200:
+    description: OK
+    schema:
+      id: avg_cost
+      properties:
+        avg-cost:
+          type: integer
+          default: 0
+        code:
+          type: string
+          default: "MV100"
+  400:
+    description: Bad request. No filters were passed. Try to filter by 'code'
+    schema:
+      id: error
+      properties:
+        error:
+          type: string
+  404:
+    description: Not found. No orders were found for this vessel
+    schema:
+      id: error
+      properties:
+        error:
+          type: string

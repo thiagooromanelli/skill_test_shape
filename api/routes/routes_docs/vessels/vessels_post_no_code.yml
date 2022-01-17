@@ -1,0 +1,32 @@
+API to create new Vessels
+---
+tags:
+  - vessels
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      id: vessel
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          description: The vessel's code.
+          default: "MV100"
+responses:
+  201:
+    description: Created. Vessel created successfully.
+    schema:
+      id: message
+      properties:
+        message:
+          type: string
+  400:
+    description: Bad request. Vessel already exists or input body is not in JSON format.
+    schema:
+      id: error
+      properties:
+        error:
+          type: string

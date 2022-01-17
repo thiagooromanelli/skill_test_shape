@@ -1,0 +1,13 @@
+API to test service
+---
+tags:
+  - ping
+responses:
+  200:
+    description: Respond PONG if everything is OK
+    schema:
+      id: ping
+      properties:
+        message:
+          type: string
+          default: 'PONG'

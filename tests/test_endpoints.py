@@ -1,12 +1,12 @@
 import unittest
 
-from app import app
+from app import api
 
 
 class AppTestCase(unittest.TestCase):
 
     def test_ping(self):
-        tester = app.test_client(self)
+        tester = api.test_client(self)
         response = tester.get('/ping')
         assert 'PONG' in response.get_json()['message']
 

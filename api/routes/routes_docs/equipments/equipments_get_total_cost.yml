@@ -1,0 +1,42 @@
+API to get total cost for given equipment code or name
+---
+tags:
+  - equipments
+parameters:
+  - in: query
+    name: code
+    schema:
+      type: string
+    description: Equipment's code
+  - in: query
+    name: name
+    schema:
+      type: string
+    description: Equipment's name
+responses:
+  200:
+    description: OK
+    schema:
+      id: total_cost
+      properties:
+        total-cost:
+          type: integer
+          default: 0
+        orders:
+          type: array
+          items:
+            type: string
+  400:
+    description: Bad request. No filters were passed. Try to filter by 'code' or 'name'
+    schema:
+      id: error
+      properties:
+        error:
+          type: string
+  404:
+    description: Not found. No orders were found for this equipment
+    schema:
+      id: error
+      properties:
+        error:
+          type: string

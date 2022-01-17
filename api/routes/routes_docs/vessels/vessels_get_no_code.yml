@@ -1,0 +1,20 @@
+API to get all Vessels
+---
+tags:
+  - vessels
+responses:
+  200:
+    description: OK
+    schema:
+      id: vessels_list
+      properties:
+        count:
+          type: integer
+          default: 2
+        vessels:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string

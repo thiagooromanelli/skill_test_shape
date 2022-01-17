@@ -1,0 +1,35 @@
+API to patch status of equipments
+---
+tags:
+  - equipments
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      id: equipment_patch_list
+      type: array
+      items:
+        type: object
+        properties:
+          code:
+            type: string
+            description: Equipment's code
+          status:
+            type: string
+            description: Equipment's status to be patched
+responses:
+  200:
+    description: OK. Status updated.
+    schema:
+      id: message
+      properties:
+        message:
+          type: string
+  400:
+    description: Bad request. Invalid code were passed or invalid input value.
+    schema:
+      id: error
+      properties:
+        error:
+          type: string
