@@ -1,0 +1,32 @@
+API to get all Vessel's equipments
+---
+tags:
+  - vessels
+parameters:
+  - in: path
+    name: vessel_code
+    required: true
+    schema:
+      type: string
+responses:
+  200:
+    description: OK
+    schema:
+      id: equipments_list
+      properties:
+        count:
+          type: integer
+          default: 2
+        equipments:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+              name:
+                type: string
+              location:
+                type: string
+              status:
+                type: string

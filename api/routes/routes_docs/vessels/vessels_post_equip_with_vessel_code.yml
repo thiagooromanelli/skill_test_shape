@@ -1,0 +1,47 @@
+API to create new equipments for given Vessel
+---
+tags:
+  - vessels
+parameters:
+  - in: path
+    name: vessel_code
+    required: true
+    schema:
+      type: string
+  - name: body
+    in: body
+    required: true
+    schema:
+      id: vessel_equipment
+      required:
+        - name
+        - code
+        - location
+      properties:
+        name:
+          type: string
+          description: The equipment's name.
+          default: "compressor"
+        code:
+          type: string
+          description: The equipment's code.
+          default: "5310B9D7"
+        location:
+          type: string
+          description: The equipment's location.
+          default: "Brazil"
+responses:
+  201:
+    description: Created. Equipment created successfully.
+    schema:
+      id: message
+      properties:
+        message:
+          type: string
+  400:
+    description: Bad request. Equipment already exists or input body is not in JSON format.
+    schema:
+      id: error
+      properties:
+        error:
+          type: string
