@@ -9,7 +9,7 @@ class VesselEquipment(db.Model):
     vessel_code = db.Column(db.String, db.ForeignKey('vessels.code'))
     name = db.Column(db.String)
     location = db.Column(db.String)
-    status = db.Column(db.String, default="active")
+    status = db.Column(db.Enum("active", "inactive", name="status"), default="active")
 
     operation_order = db.relationship('OperationOrder', cascade='all,delete', backref='vessel_equipments')
 
