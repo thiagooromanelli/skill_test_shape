@@ -1,6 +1,5 @@
 version: "3.8"
 services:
-
   pg:
     image: postgres
     container_name: pg
@@ -11,17 +10,16 @@ services:
       POSTGRES_PASSWORD: "12345"
     restart: on-failure
     volumes:
-      - ../postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
 
-#  web:
-##    build: .
-#    image: webapp
-#    container_name: webapp
-#    network_mode: "host"
-#    depends_on:
-#      - pg
-#    expose:
-#      - 5000
-#    environment:
-#      - FLASK_ENV=development
-#      - SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost:5432/FPSO
+  web:
+    build: .
+    container_name: webapp
+    network_mode: "host"
+    depends_on:
+      - pg
+    expose:
+      - 5000
+    environment:
+      - FLASK_ENV=development
+      - SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost:5432/FPSO

@@ -47,6 +47,26 @@ is: {"code": "5310B9D7", type: "replacement", "cost": "10000"}
     ```
     docker-compose up
     ```
-- PostgreSQL will start with database FPSO already created
-- The application will start on http://localhost:5000, and will create the tables in database
+- PostgreSQL will start with database 'FPSO' already created
+- The application will start on http://localhost:5000, and will create the required tables in database
 - The swagger documentation will be available on http://localhost:5000/apidocs
+- You can test the application through swagger or Postman.
+
+### API routes
+| HTTP Method |                              Routes                             |
+|:-----------:|:---------------------------------------------------------------:|
+|     GET     |                            /api/ping                            |
+|     GET     |                           /api/vessels                          |
+|     POST    |                           /api/vessels                          |
+|     GET     |                    /api/vessels/<vessel_code>                   |
+|     GET     |              /api/vessels/<vessel_code>/equipments              |
+|     POST    |              /api/vessels/<vessel_code>/equipments              |
+|     GET     | /api/vessels/<vessel_code>/equipments?status=<active\|incative> |
+|     GET     |      /api/vessels/<vessel_code>/equipments/<equipment_code>     |
+|    PATCH    |                      /api/equipments/status                     |
+|     GET     |                      /api/equipments/orders                     |
+|     POST    |                      /api/equipments/orders                     |
+|     GET     |             /api/equipments/<equipment_code>/orders             |
+|     GET     |     /api/equipments/orders/total-cost?code=<equipment_code>     |
+|     GET     |     /api/equipments/orders/total-cost?name=<equipment_name>     |
+|     GET     |        /api/equipments/orders/avg-cost?code=<vessel_code>       |
