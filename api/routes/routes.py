@@ -268,11 +268,11 @@ def avg_cost_by_vessel():
                 OperationOrder,
                 VesselEquipment
             ).join(VesselEquipment).filter(VesselEquipment.vessel_code == vessel_code)
-            if len(data.all()) == 0:
+            if data.count() == 0:
                 return jsonify({"error": "No orders were found for this vessel"}), status.HTTP_404_NOT_FOUND
             for order, equipment in data:
                 total_cost += order.cost
-            avg_cost = total_cost/len(data.all())
+            avg_cost = total_cost/data.count()
             return jsonify({
                 "code": vessel_code,
                 "avg-cost": avg_cost
